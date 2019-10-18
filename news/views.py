@@ -4,8 +4,8 @@ import datetime as dt
 
 # Create your views here.
 def welcome(request):
-    return HttpResponse('Welcome to Yearly Awards')
-
+    return render(request, 'welcome.html')
+    
 def awards_of_day(request):
     date = dt.date.today()
     
