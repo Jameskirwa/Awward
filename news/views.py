@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 import datetime as dt
 
 # Create your views here.
 def welcome(request):
-    return HttpResponse('Welcome to yearly awards')
-def news_of_day(request):
+    return HttpResponse('Welcome to yearly Awards')
+
+def awards_of_day(request):
     date = dt.date.today()
     
     # FUNCTION TO CONVERT DATE OBJECT TO FIND EXACT DAY
@@ -13,7 +14,7 @@ def news_of_day(request):
     html = f'''
         <html>
             <body>
-                <h1> Awards for {day} {date.day}-{date.month}-{date.year}</h1>
+                <h1> News for {day} {date.day}-{date.month}-{date.year}</h1>
             </body>
         </html>
             '''
@@ -29,3 +30,22 @@ def convert_dates(dates):
     # Returning the actual day of the week
     day = days[day_number]
     return day
+
+def past_days_awards(request,past_date):
+    
+    try:
+        # Converts data from the string Url
+        date = dt.datetime.strptime(past_date,'%Y-%m-%d').date()
+    except ValueError:
+        # Raise 404 error when ValueError is thrown
+        raise Http404()
+
+    day = convert_dates(date)
+    html = f'''
+        <html>
+            <body>
+                <h1>Awards for {day} {date.day}-{date.month}-{date.year}</h1>
+            </body>
+        </html>
+            '''
+    return HttpResponse(html)
